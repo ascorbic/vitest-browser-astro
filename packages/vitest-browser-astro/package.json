@@ -8,21 +8,38 @@
     "dist"
   ],
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./plugin": "./dist/plugin.js",
+    "./pure": "./dist/pure.js"
   },
   "scripts": {
-    "build": "tsdown src/index.ts --format esm --dts --clean",
-    "dev": "tsdown src/index.ts --format esm --dts --watch",
+    "build": "tsdown src/index.ts src/plugin.ts src/pure.ts --format esm --dts --clean",
+    "dev": "tsdown src/index.ts src/plugin.ts src/pure.ts --format esm --dts --watch",
     "prepublishOnly": "node --run build",
     "check": "publint && attw --pack --ignore-rules=cjs-resolves-to-esm",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test:all": "pnpm test && pnpm test:browser",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@vitest/browser": "^3.2.4"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@types/feedparser": "^2.2.8",
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.18.10",
+    "astro": "^5.14.4",
     "publint": "^0.3.14",
     "tsdown": "^0.15.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^6.0.11",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "astro": "^5.x",
+    "vitest": "^3.x",
+    "vite": "^6.x"
   },
   "repository": {
     "type": "git",
@@ -30,7 +47,12 @@
     "directory": "packages/vitest-browser-astro"
   },
   "homepage": "https://github.com/ascorbic/vitest-browser-astro",
-  "keywords": ["vitest", "browser", "astro", "testing"],
+  "keywords": [
+    "vitest",
+    "browser",
+    "astro",
+    "testing"
+  ],
   "author": "Matt Kane",
   "license": "MIT"
 }

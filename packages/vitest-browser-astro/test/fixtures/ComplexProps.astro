@@ -1,0 +1,24 @@
+---
+interface Props {
+	count: number;
+	tags: string[];
+	config: {
+		enabled: boolean;
+		theme: string;
+	};
+	createdAt: Date;
+}
+
+const { count, tags, config, createdAt } = Astro.props;
+---
+
+<div class="complex" data-testid="complex">
+	<div data-testid="count">{count}</div>
+	<ul data-testid="tags">
+		{tags.map(tag => <li>{tag}</li>)}
+	</ul>
+	<div data-testid="config">
+		{config.enabled ? 'enabled' : 'disabled'} - {config.theme}
+	</div>
+	<time data-testid="created-at">{createdAt.toISOString()}</time>
+</div>

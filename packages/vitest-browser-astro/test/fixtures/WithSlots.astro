@@ -1,0 +1,19 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="container" data-testid="container">
+	<header>
+		<h1>{title}</h1>
+	</header>
+	<main>
+		<slot />
+	</main>
+	<footer>
+		<slot name="footer" />
+	</footer>
+</div>
