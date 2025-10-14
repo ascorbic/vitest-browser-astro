@@ -1,8 +1,80 @@
 ---
-// Dummy page to satisfy Astro's pages requirement
+import SimpleCard from '../components/SimpleCard.astro';
+import WithSlots from '../components/WithSlots.astro';
+import ComplexProps from '../components/ComplexProps.astro';
+import Button from '../components/Button.astro';
 ---
-<html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Astro Test Fixture Site</title>
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				max-width: 800px;
+				margin: 2rem auto;
+				padding: 0 1rem;
+				line-height: 1.6;
+			}
+			section {
+				margin: 2rem 0;
+				padding: 1.5rem;
+				border: 1px solid #ddd;
+				border-radius: 8px;
+			}
+			h1 {
+				color: #333;
+			}
+			h2 {
+				color: #666;
+				margin-top: 0;
+			}
+			.card {
+				background: #f5f5f5;
+				padding: 1rem;
+				border-radius: 4px;
+				margin: 1rem 0;
+			}
+			.complex {
+				background: #f0f8ff;
+				padding: 1rem;
+				border-radius: 4px;
+			}
+		</style>
+	</head>
 	<body>
-		<h1>Test Fixture Site</h1>
+		<h1>Astro Test Fixture Site</h1>
+		<p>This is a minimal Astro site used for testing vitest-browser-astro components.</p>
+
+		<section>
+			<h2>SimpleCard Component</h2>
+			<SimpleCard title="Hello World" description="This is a test card with props" />
+			<SimpleCard title="No Description" />
+		</section>
+
+		<section>
+			<h2>WithSlots Component</h2>
+			<WithSlots title="Card with Slots">
+				<p>This is the default slot content</p>
+				<p slot="footer">This is footer slot content</p>
+			</WithSlots>
+		</section>
+
+		<section>
+			<h2>ComplexProps Component</h2>
+			<ComplexProps
+				count={42}
+				tags={['astro', 'vitest', 'testing']}
+				config={{ enabled: true, theme: 'light' }}
+				createdAt={new Date('2024-01-01')}
+			/>
+		</section>
+
+		<section>
+			<h2>Button Component</h2>
+			<Button label="Click Me" />
+		</section>
 	</body>
 </html>

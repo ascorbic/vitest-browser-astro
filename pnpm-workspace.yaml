@@ -1,3 +1,4 @@
 packages:
   - "packages/*"
+  - "packages/vitest-browser-astro/test/fixtures/astro-site"
   - "demos/*"

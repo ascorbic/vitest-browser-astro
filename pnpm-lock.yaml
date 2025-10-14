@@ -70,6 +70,12 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.10)(@vitest/browser@3.2.4)(jiti@2.5.1)
 
+  packages/vitest-browser-astro/test/fixtures/astro-site:
+    dependencies:
+      astro:
+        specifier: ^5.14.4
+        version: 5.14.4(@types/node@22.18.10)(jiti@2.5.1)(rollup@4.34.9)(typescript@5.9.3)
+
 packages:
 
   '@andrewbranch/untar.js@1.0.3':
