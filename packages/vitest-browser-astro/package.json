@@ -4,13 +4,23 @@
   "description": "Vitest browser mode renderer for Astro",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./plugin": "./dist/plugin.js",
-    "./pure": "./dist/pure.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "default": "./dist/plugin.js"
+    },
+    "./pure": {
+      "types": "./dist/pure.d.ts",
+      "default": "./dist/pure.js"
+    }
   },
   "scripts": {
     "build": "tsdown src/index.ts src/plugin.ts src/pure.ts --format esm --dts --clean",
@@ -44,7 +54,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+github.com:ascorbic/vitest-browser-astro.git",
+    "url": "git+https://github.com/ascorbic/vitest-browser-astro.git",
     "directory": "packages/vitest-browser-astro"
   },
   "homepage": "https://github.com/ascorbic/vitest-browser-astro",

@@ -19,5 +19,10 @@
 		"prettier": "^3.6.2",
 		"vitest": "^3.2.4"
 	},
+	"pnpm": {
+		"overrides": {
+			"vite": "^6.3.6"
+		}
+	},
 	"packageManager": "pnpm@10.18.2"
 }
