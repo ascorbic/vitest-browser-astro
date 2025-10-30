@@ -17,9 +17,6 @@ export default getViteConfig({
 			],
 		}),
 	],
-	optimizeDeps: {
-		include: ["react", "react-dom", "react-dom/client"],
-	},
 	test: {
 		// Browser integration tests
 		include: ["test/**/*.test.ts"],

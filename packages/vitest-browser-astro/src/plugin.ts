@@ -145,6 +145,9 @@ export function astroRenderer(options: AstroRendererOptions = {}): Plugin {
 
 		config() {
 			return {
+				optimizeDeps: {
+					include: ["react", "react-dom", "react-dom/client"],
+				},
 				test: {
 					browser: {
 						commands: {
