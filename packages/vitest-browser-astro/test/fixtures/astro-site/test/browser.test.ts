@@ -24,8 +24,8 @@ describe("render() in browser", () => {
 				},
 			});
 
-			expect(screen.container).toBeTruthy();
-			expect(screen.container).toBeInstanceOf(HTMLElement);
+			expect(screen.element()).toBeTruthy();
+			expect(screen.element()).toBeInstanceOf(HTMLElement);
 			await expect.element(screen.getByTestId("card")).toBeInTheDocument();
 		});
 
@@ -52,7 +52,7 @@ describe("render() in browser", () => {
 
 			await expect.element(screen.getByText("Only Title")).toBeVisible();
 			// Description should not be rendered
-			expect(screen.container.querySelector("p")).toBeNull();
+			expect(screen.element().querySelector("p")).toBeNull();
 		});
 	});
 
@@ -82,7 +82,7 @@ describe("render() in browser", () => {
 
 			await expect.element(screen.getByTestId("tags")).toBeInTheDocument();
 			expect(
-				screen.container.querySelectorAll('[data-testid="tags"] li'),
+				screen.element().querySelectorAll('[data-testid="tags"] li'),
 			).toHaveLength(3);
 		});
 
@@ -166,29 +166,6 @@ describe("render() in browser", () => {
 			await expect
 				.element(screen.getByTestId("footer"))
 				.toHaveTextContent("Footer content");
-		});
-	});
-
-	describe("cleanup", () => {
-		it("should provide unmount function", async () => {
-			const screen = await render(SimpleCard, {
-				props: { title: "Test" },
-			});
-
-			expect(screen.unmount).toBeTypeOf("function");
-		});
-
-		it("should remove component from DOM when unmounted", async () => {
-			const screen = await render(SimpleCard, {
-				props: { title: "Test" },
-			});
-
-			const card = screen.getByTestId("card");
-			await expect.element(card).toBeInTheDocument();
-
-			screen.unmount();
-
-			expect(document.body.contains(screen.container)).toBe(false);
 		});
 	});
 
@@ -437,7 +414,7 @@ describe("React components", () => {
 		await expect.element(count).toHaveTextContent("0");
 
 		// Wait for hydration to complete before interacting
-		await waitForHydration(screen.container);
+		await waitForHydration(screen);
 		await userEvent.click(incrementBtn);
 		await expect.element(count).toHaveTextContent("1");
 
@@ -446,6 +423,27 @@ describe("React components", () => {
 
 		await userEvent.click(decrementBtn);
 		await expect.element(count).toHaveTextContent("1");
+	});
+
+	it("should wait for hydration on a specific locator", async () => {
+		const screen = await render(WithReact, {
+			props: {
+				initialCount: 5,
+			},
+		});
+
+		const container = screen.getByTestId("with-react");
+
+		// Wait for hydration on the specific container
+		await waitForHydration(container);
+
+		const count = screen.getByTestId("react-count");
+		const incrementBtn = screen.getByTestId("react-increment");
+
+		await expect.element(count).toHaveTextContent("5");
+
+		await userEvent.click(incrementBtn);
+		await expect.element(count).toHaveTextContent("6");
 	});
 });
 
@@ -494,7 +492,7 @@ describe("Vue components", () => {
 		await expect.element(count).toHaveTextContent("0");
 
 		// Wait for hydration to complete before interacting
-		await waitForHydration(screen.container);
+		await waitForHydration(screen);
 
 		await userEvent.click(incrementBtn);
 		await expect.element(count).toHaveTextContent("1");
@@ -554,7 +552,7 @@ describe("Svelte components", () => {
 		await expect.element(count).toHaveTextContent("0");
 
 		// Wait for hydration to complete before interacting
-		await waitForHydration(screen.container);
+		await waitForHydration(screen);
 
 		await userEvent.click(incrementBtn);
 		await expect.element(count).toHaveTextContent("1");

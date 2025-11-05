@@ -20,10 +20,8 @@ export interface RenderOptions {
 }
 
 /**
- * Result returned from render() function with DOM access and locators
+ * Result returned from render() function
  */
 export interface RenderResult extends LocatorSelectors {
-	container: HTMLElement;
-	baseElement: HTMLElement;
-	unmount: () => void;
+	element: () => HTMLElement;
 }

@@ -16,6 +16,8 @@ Using pnpm:
 pnpm add -D vitest-browser-astro @vitest/browser playwright
 ```
 
+**Note:** This package currently requires Vitest 3.x. Vitest 4 is not yet compatible with Astro.
+
 ## Quick Start
 
 Create `vitest.config.ts`:
@@ -225,7 +227,7 @@ test("React counter increments on click", async () => {
 	const screen = await render(Counter);
 
 	// Wait for hydration to complete
-	await waitForHydration(screen.container);
+	await waitForHydration(screen);
 
 	const count = screen.getByTestId("count");
 	const button = screen.getByTestId("increment");
@@ -251,10 +253,14 @@ Astro wraps framework components in `<astro-island>` elements with an `ssr` attr
 
 The `waitForHydration()` function waits for this attribute to be removed before proceeding.
 
-Pass `screen.container` to wait for all islands, or a specific island element to wait for just that one. An optional timeout can be specified (default: 5000ms):
+Pass the `screen` result to wait for all islands, or a specific locator to wait for islands within that element:
 
 ```ts
-await waitForHydration(screen.container, 10000); // Wait up to 10 seconds
+// Wait for all islands in the component
+await waitForHydration(screen);
+
+// Wait for islands within a specific element
+await waitForHydration(screen.getByTestId("header"));
 ```
 
 Skip `waitForHydration()` for components without client directives. You can also manually check for hydration by waiting for the `ssr` attribute to be removed:
@@ -295,10 +301,9 @@ const screen = await render(Component, {
 });
 ```
 
-Returns an object which includes Vitest Browser's [locator selectors](https://vitest.dev/guide/browser/#locators) and the container element.
+Returns an object which includes Vitest Browser's [locator selectors](https://vitest.dev/guide/browser/#locators) and an `.element()` method.
 
-- `container` - DOM element containing the rendered component
-- `unmount()` - Remove the component from the DOM
+- `element()` - Returns the DOM element containing the rendered component
 - `getByRole(role)` - Find element by ARIA role
 - `getByAltText(altText)` - Find element by alt text
 - `getByLabelText(labelText)` - Find element by associated label text
@@ -307,14 +312,16 @@ Returns an object which includes Vitest Browser's [locator selectors](https://vi
 - `getByTitle(title)` - Find element by title attribute
 - `getByTestId(id)` - Find element by `data-testid` attribute
 
-### `waitForHydration(container, timeout?)`
+### `waitForHydration(locator)`
 
-Waits for framework component hydration to complete (default timeout: 5000ms).
+Waits for framework component hydration to complete.
 
 ```ts
-await waitForHydration(screen.container);
-// or a specific island
-await waitForHydration(screen.getByTestId("header"));
+// Wait for all islands
+await waitForHydration(screen);
+
+// Wait for islands within a specific element
+await waitForHydration(screen.getByTestId("footer"));
 ```
 
 ### `cleanup()`
@@ -322,24 +329,6 @@ await waitForHydration(screen.getByTestId("header"));
 Removes all rendered components from the DOM. Called automatically between tests.
 
 ## Troubleshooting
-
-### TypeScript errors with `.astro` imports
-
-Ensure `tsconfig.json` extends Astro's base configuration:
-
-```json
-{
-	"extends": "astro/tsconfigs/base"
-}
-```
-
-Then restart the TypeScript server.
-
-### Tests hanging or timing out
-
-1. Install Playwright browsers: `npx playwright install`
-2. Verify `browser.enabled: true` in Vitest config
-3. Run with `headless: false` to debug visually
 
 ### Framework components not hydrating
 
@@ -353,7 +342,7 @@ For more issues, see [GitHub Issues](https://github.com/ascorbic/vitest-browser-
 ## Requirements
 
 - Astro 5.x or later
-- Vitest 3.x or later
+- Vitest 3.x (Vitest 4 is not yet compatible with Astro)
 - Vite 6.x or later
 
 ## Contributing

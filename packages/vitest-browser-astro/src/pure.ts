@@ -1,4 +1,6 @@
 import { getElementLocatorSelectors } from "@vitest/browser/utils";
+import type { Locator } from "@vitest/browser/context";
+import { expect } from "vitest";
 import type { RenderOptions, RenderResult } from "./types";
 
 const mountedContainers = new Set<HTMLElement>();
@@ -65,26 +67,15 @@ function setupContainer(
 }
 
 /**
- * Creates a render result with cleanup and locators
+ * Creates a render result with locators
  */
 function createRenderResult(
 	container: HTMLElement,
 	baseElement: HTMLElement,
 ): RenderResult {
 	mountedContainers.add(container);
-
-	const unmount = () => {
-		container.innerHTML = "";
-		mountedContainers.delete(container);
-		if (container.parentNode === document.body) {
-			document.body.removeChild(container);
-		}
-	};
-
 	return {
-		container,
-		baseElement,
-		unmount,
+		element: () => container,
 		...getElementLocatorSelectors(baseElement),
 	};
 }
@@ -130,30 +121,25 @@ export async function cleanup(): Promise<void> {
  * Call this before interacting with framework components to ensure event handlers
  * are attached and the component is fully interactive.
  *
- * @param container - The container element to search for islands (usually screen.container)
- * @param timeout - Maximum time to wait in milliseconds (default: 5000)
+ * @param container - Either a Locator or RenderResult to search for astro-island children
  *
  * @example
  * ```ts
+ * // Wait for all islands in the render result
  * const screen = await render(Counter);
- * await waitForHydration(screen.container);
- * await userEvent.click(screen.getByRole('button'));
+ * await waitForHydration(screen);
+ *
+ * // Wait for a specific island
+ * await waitForHydration(screen.getByTestId('my-island'));
  * ```
  */
 export async function waitForHydration(
-	container: HTMLElement,
-	timeout = 5000,
+	container: Locator | RenderResult,
 ): Promise<void> {
-	// Use a simple polling approach since we're in browser context
-	const startTime = Date.now();
-	while (container.querySelectorAll("astro-island[ssr]").length > 0) {
-		if (Date.now() - startTime > timeout) {
-			const remainingCount =
-				container.querySelectorAll("astro-island[ssr]").length;
-			throw new Error(
-				`Hydration timeout: ${remainingCount} island(s) still have 'ssr' attribute after ${timeout}ms`,
-			);
-		}
-		await new Promise((resolve) => setTimeout(resolve, 50));
-	}
+	// Poll until all astro-island children no longer have the ssr attribute
+	await expect
+		.poll(
+			() => container.element().querySelectorAll("astro-island[ssr]").length,
+		)
+		.toBe(0);
 }
