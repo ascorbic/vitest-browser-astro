@@ -1,5 +1,4 @@
 import type { Locator, LocatorSelectors } from "@vitest/browser/context";
-import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 
 /**
  * Metadata object that replaces .astro imports in browser context
@@ -27,8 +26,4 @@ export interface RenderResult extends LocatorSelectors {
 	container: HTMLElement;
 	baseElement: HTMLElement;
 	unmount: () => void;
-	debug: (
-		el?: HTMLElement | HTMLElement[] | Locator | Locator[],
-		maxLength?: number,
-	) => void;
 }

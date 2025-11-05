@@ -81,16 +81,10 @@ function createRenderResult(
 		}
 	};
 
-	const debug = (el?: any, maxLength?: number) => {
-		const element = el?.element?.() || el || container;
-		console.log(element.outerHTML?.substring(0, maxLength || 7000));
-	};
-
 	return {
 		container,
 		baseElement,
 		unmount,
-		debug,
 		...getElementLocatorSelectors(baseElement),
 	};
 }

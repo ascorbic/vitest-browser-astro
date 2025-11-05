@@ -438,7 +438,6 @@ describe("React components", () => {
 
 		// Wait for hydration to complete before interacting
 		await waitForHydration(screen.container);
-
 		await userEvent.click(incrementBtn);
 		await expect.element(count).toHaveTextContent("1");
 

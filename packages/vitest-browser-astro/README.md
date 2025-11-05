@@ -16,12 +16,6 @@ Using pnpm:
 pnpm add -D vitest-browser-astro @vitest/browser playwright
 ```
 
-Using yarn:
-
-```bash
-yarn add -D vitest-browser-astro @vitest/browser playwright
-```
-
 ## Quick Start
 
 Create `vitest.config.ts`:
@@ -36,7 +30,7 @@ export default getViteConfig({
 		browser: {
 			enabled: true,
 			name: "chromium",
-			provider: "playwright",
+			provider: "playwright", // or 'webdriverio'
 			headless: true,
 		},
 	},
@@ -95,37 +89,6 @@ astroRenderer({
 
 See the [Container API renderers documentation](https://docs.astro.build/en/reference/container-reference/#renderers-option) for more details.
 
-### Browser providers
-
-#### Playwright
-
-```ts
-export default getViteConfig({
-	test: {
-		browser: {
-			enabled: true,
-			name: "chromium", // or 'firefox', 'webkit'
-			provider: "playwright",
-			headless: true,
-		},
-	},
-});
-```
-
-#### WebdriverIO
-
-```ts
-export default getViteConfig({
-	test: {
-		browser: {
-			enabled: true,
-			name: "chrome",
-			provider: "webdriverio",
-		},
-	},
-});
-```
-
 ## Testing Astro Components
 
 ### `props` and `slots`
@@ -151,26 +114,7 @@ test("renders slot content", async () => {
 });
 ```
 
-Props serialize automatically using [devalue](https://github.com/rich-harris/devalue), supporting Dates, RegExps, Maps, Sets, and other non-JSON types:
-
-```ts
-import { render } from "vitest-browser-astro";
-import { expect, test } from "vitest";
-import Post from "./Post.astro";
-
-test("handles Date props", async () => {
-	const screen = await render(Post, {
-		props: {
-			title: "My Post",
-			publishedAt: new Date("2024-01-15T10:00:00Z"),
-			tags: new Set(["astro", "testing"]),
-			metadata: new Map([["author", "Jane"]]),
-		},
-	});
-
-	await expect.element(screen.getByText(/January 15, 2024/)).toBeVisible();
-});
-```
+Props are serialized using [devalue](https://github.com/rich-harris/devalue), and can be JSON primitives, `Date`s, `RegExp`s, `Map`s, or `Set`s.
 
 ### Interactive components with scripts
 
@@ -313,11 +257,17 @@ Pass `screen.container` to wait for all islands, or a specific island element to
 await waitForHydration(screen.container, 10000); // Wait up to 10 seconds
 ```
 
-Skip `waitForHydration()` for components without client directives.
+Skip `waitForHydration()` for components without client directives. You can also manually check for hydration by waiting for the `ssr` attribute to be removed:
+
+```ts
+await expect
+	.element(screen.getByTestId("my-island"))
+	.not.toHaveAttribute("ssr");
+```
 
 ### Supported frameworks
 
-Only one JSX-based framework (React, Preact, or Solid) can be used at a time. The Astro Container API cannot distinguish between different JSX frameworks in the same test configuration. Non-JSX frameworks (Vue, Svelte) can be combined with any JSX framework.
+Any [front-end framework](https://docs.astro.build/en/guides/framework-components/) with an Astro adapter is supported. Only one JSX-based framework (React, Preact, or Solid) can be used at a time because the Astro Container API cannot distinguish between different JSX frameworks in the same test configuration. Non-JSX frameworks (Vue, Svelte) can be combined with any JSX framework.
 
 ## User Interactions
 
@@ -345,14 +295,17 @@ const screen = await render(Component, {
 });
 ```
 
-Returns `RenderResult` with:
+Returns an object which includes Vitest Browser's [locator selectors](https://vitest.dev/guide/browser/#locators) and the container element.
 
 - `container` - DOM element containing the rendered component
-- `getByText(text)` - Find element by text content
-- `getByTestId(id)` - Find element by `data-testid` attribute
-- `getByRole(role)` - Find element by ARIA role
 - `unmount()` - Remove the component from the DOM
-- `debug()` - Log the DOM structure
+- `getByRole(role)` - Find element by ARIA role
+- `getByAltText(altText)` - Find element by alt text
+- `getByLabelText(labelText)` - Find element by associated label text
+- `getByPlaceholder(placeholderText)` - Find element by placeholder text
+- `getByText(text)` - Find element by text content
+- `getByTitle(title)` - Find element by title attribute
+- `getByTestId(id)` - Find element by `data-testid` attribute
 
 ### `waitForHydration(container, timeout?)`
 
@@ -360,6 +313,8 @@ Waits for framework component hydration to complete (default timeout: 5000ms).
 
 ```ts
 await waitForHydration(screen.container);
+// or a specific island
+await waitForHydration(screen.getByTestId("header"));
 ```
 
 ### `cleanup()`
