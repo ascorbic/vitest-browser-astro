@@ -343,6 +343,8 @@ For more issues, see [GitHub Issues](https://github.com/ascorbic/vitest-browser-
 
 Contributions are welcome. Check the [GitHub repository](https://github.com/ascorbic/vitest-browser-astro) for issues and pull requests.
 
+Inspired by [vitest-browser-qwik](https://github.com/kunai-consulting/vitest-browser-qwik)
+
 ## License
 
 MIT © [Matt Kane](https://github.com/ascorbic)
