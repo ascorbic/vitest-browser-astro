@@ -174,7 +174,7 @@ test("toggles state on click", async () => {
 
 ## Testing Framework Components
 
-Framework components (e.g. React, Vue, Svelte) require configuration for both server-side rendering and client-side hydration.
+Framework components (e.g. React, Vue, Svelte) require changes in the Astro and Vitest config:
 
 ### Setup
 
@@ -263,13 +263,7 @@ await waitForHydration(screen);
 await waitForHydration(screen.getByTestId("header"));
 ```
 
-Skip `waitForHydration()` for components without client directives. You can also manually check for hydration by waiting for the `ssr` attribute to be removed:
-
-```ts
-await expect
-	.element(screen.getByTestId("my-island"))
-	.not.toHaveAttribute("ssr");
-```
+Skip `waitForHydration()` for components without client directives. 
 
 ### Supported frameworks
 
