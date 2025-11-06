@@ -277,7 +277,7 @@ Any [front-end framework](https://docs.astro.build/en/guides/framework-component
 
 ## User Interactions
 
-Use `@vitest/browser/context` for simulating user interactions:
+Use `userEvent` from `@vitest/browser/context` for simulating user interactions:
 
 ```ts
 import { userEvent } from "@vitest/browser/context";
