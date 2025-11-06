@@ -1,4 +1,4 @@
-import type { Locator, LocatorSelectors } from "@vitest/browser/context";
+import type { Locator, LocatorSelectors } from "vitest/browser";
 
 /**
  * Metadata object that replaces .astro imports in browser context

@@ -33,7 +33,6 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@vitest/browser": "^3.2.4",
     "devalue": "^5.3.2"
   },
   "devDependencies": {
@@ -43,6 +42,7 @@
     "@types/node": "^22.18.10",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@vitest/browser-playwright": "https://pkg.pr.new/@vitest/browser-playwright@8950",
     "astro": "^5.14.4",
     "publint": "^0.3.14",
     "react": "^19.2.0",
@@ -50,12 +50,12 @@
     "tsdown": "^0.15.6",
     "typescript": "^5.9.3",
     "vite": "^6.0.11",
-    "vitest": "^3.2.4"
+    "vitest": "https://pkg.pr.new/vitest@8950"
   },
   "peerDependencies": {
     "astro": "^5.x",
     "vite": "^6.x",
-    "vitest": "^3.x"
+    "vitest": "^4.x"
   },
   "repository": {
     "type": "git",
