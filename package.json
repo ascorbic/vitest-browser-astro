@@ -17,7 +17,7 @@
 		"@changesets/cli": "^2.29.7",
 		"@types/node": "^22.18.10",
 		"prettier": "^3.6.2",
-		"vitest": "^3.2.4"
+		"vitest": "https://pkg.pr.new/vitest@8950"
 	},
 	"pnpm": {
 		"overrides": {

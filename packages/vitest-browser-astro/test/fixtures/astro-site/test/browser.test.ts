@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { userEvent } from "@vitest/browser/context";
+import { userEvent } from "vitest/browser";
 import { render, waitForHydration } from "vitest-browser-astro";
 import SimpleCard from "../src/components/SimpleCard.astro";
 import WithSlots from "../src/components/WithSlots.astro";

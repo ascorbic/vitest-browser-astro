@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.49.0",
-		"@vitest/browser": "^3.2.4",
-		"vitest": "^3.2.4"
+		"@vitest/browser-playwright": "https://pkg.pr.new/@vitest/browser-playwright@8950",
+		"vitest": "https://pkg.pr.new/vitest@8950"
 	}
 }

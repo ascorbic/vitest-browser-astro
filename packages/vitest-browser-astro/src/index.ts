@@ -1,4 +1,4 @@
-import { commands } from "@vitest/browser/context";
+import { commands } from "vitest/browser";
 import { beforeEach } from "vitest";
 import { stringify } from "devalue";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
@@ -75,7 +75,7 @@ beforeEach(async () => {
 });
 
 // Extend Vitest browser context types
-declare module "@vitest/browser/context" {
+declare module "vitest/browser" {
 	interface BrowserCommands {
 		renderAstro: (
 			componentPath: string,
