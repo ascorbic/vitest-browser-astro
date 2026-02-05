@@ -25,6 +25,7 @@
   "scripts": {
     "build": "tsdown src/index.ts src/plugin.ts src/pure.ts --format esm --dts --clean",
     "dev": "tsdown src/index.ts src/plugin.ts src/pure.ts --format esm --dts --watch",
+    "prepare": "node --run build",
     "prepublishOnly": "node --run build",
     "check": "publint && attw --pack --ignore-rules=cjs-resolves-to-esm --profile=node16",
     "test": "vitest run",
