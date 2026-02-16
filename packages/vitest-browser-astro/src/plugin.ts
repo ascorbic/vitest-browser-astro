@@ -142,7 +142,7 @@ export function astroRenderer(options: AstroRendererOptions = {}): Plugin {
 			renderAstroCommand = await createRenderAstroCommand(container);
 		},
 
-		config(config, { command }) {
+		config(config) {
 			return {
 				optimizeDeps: {
 					include: ["react", "react-dom", "react-dom/client"],
