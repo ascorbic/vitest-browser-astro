@@ -9,13 +9,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8.15.9
+      - uses: pnpm/action-setup@v3
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           cache: "pnpm"
+          node-version: lts/*
           check-latest: true
           registry-url: "https://registry.npmjs.org"
       - name: Install dependencies
