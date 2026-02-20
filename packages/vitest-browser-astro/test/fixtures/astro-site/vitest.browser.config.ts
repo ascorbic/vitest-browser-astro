@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import { getViteConfig } from "astro/config";
+import { playwright } from "@vitest/browser-playwright";
 import { astroRenderer } from "vitest-browser-astro/plugin";
 import { getContainerRenderer as getReactRenderer } from "@astrojs/react";
 import { getContainerRenderer as getVueRenderer } from "@astrojs/vue";
@@ -12,12 +13,11 @@ export default getViteConfig({
 		}),
 	],
 	test: {
-		// Browser integration tests
 		include: ["test/**/*.test.ts"],
 		browser: {
 			enabled: true,
 			instances: [{ browser: "chromium" }],
-			provider: "playwright",
+			provider: playwright(),
 			headless: true,
 		},
 	},

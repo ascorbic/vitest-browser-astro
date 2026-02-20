@@ -142,7 +142,7 @@ export function astroRenderer(options: AstroRendererOptions = {}): Plugin {
 			renderAstroCommand = await createRenderAstroCommand(container);
 		},
 
-		config() {
+		config(config) {
 			return {
 				optimizeDeps: {
 					include: ["react", "react-dom", "react-dom/client"],
@@ -160,6 +160,40 @@ export function astroRenderer(options: AstroRendererOptions = {}): Plugin {
 					},
 				},
 			};
+		},
+
+		configResolved(config) {
+			// Override Astro's ssr.noExternal: true to allow CJS packages to be externalized
+			// Astro sets noExternal: true which forces all packages through Vite's Module Runner
+			// But CJS packages fail in the Module Runner's ESModulesEvaluator
+			// We need to set noExternal to a specific list instead of true
+			const cjsPackages = [
+				"react",
+				"react-dom",
+				"vue",
+				"svelte",
+				"picocolors",
+				"cssesc",
+				"string-width",
+				"prismjs",
+			];
+
+			// If noExternal is true, convert it to array excluding CJS packages
+			if (config.ssr.noExternal === true) {
+				// @ts-expect-error - mutating readonly config to fix CJS compatibility
+				config.ssr.noExternal = [];
+			}
+
+			// Ensure CJS packages are in the external list
+			const external = config.ssr.external;
+			if (Array.isArray(external)) {
+				for (const pkg of cjsPackages) {
+					if (!external.includes(pkg)) {
+						// @ts-expect-error - mutating readonly config to fix CJS compatibility
+						external.push(pkg);
+					}
+				}
+			}
 		},
 
 		async transform(_code, id, options) {

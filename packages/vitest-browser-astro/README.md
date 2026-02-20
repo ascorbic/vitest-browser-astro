@@ -7,16 +7,16 @@ Astro components render server-side using the [Container API](https://docs.astro
 ## Installation
 
 ```bash
-npm install -D vitest-browser-astro @vitest/browser playwright
+npm install -D vitest-browser-astro vitest @vitest/browser-playwright playwright
 ```
 
 Using pnpm:
 
 ```bash
-pnpm add -D vitest-browser-astro @vitest/browser playwright
+pnpm add -D vitest-browser-astro vitest @vitest/browser-playwright playwright
 ```
 
-**Note:** This package currently requires Vitest 3.x. Vitest 4 is not yet compatible with Astro.
+**Note:** This package requires Vitest 4.x or later.
 
 ## Quick Start
 
@@ -25,14 +25,15 @@ Create `vitest.config.ts`:
 ```ts
 import { getViteConfig } from "astro/config";
 import { astroRenderer } from "vitest-browser-astro/plugin";
+import { playwright } from "@vitest/browser-playwright";
 
 export default getViteConfig({
 	plugins: [astroRenderer()],
 	test: {
 		browser: {
 			enabled: true,
-			name: "chromium",
-			provider: "playwright", // or 'webdriverio'
+			instances: [{ browser: "chromium" }],
+			provider: playwright(),
 			headless: true,
 		},
 	},
@@ -195,6 +196,7 @@ Configure framework renderers in `vitest.config.ts` using `getContainerRenderer(
 import { getViteConfig } from "astro/config";
 import { astroRenderer } from "vitest-browser-astro/plugin";
 import { getContainerRenderer as getReactRenderer } from "@astrojs/react";
+import { playwright } from "@vitest/browser-playwright";
 
 export default getViteConfig({
 	plugins: [
@@ -205,8 +207,8 @@ export default getViteConfig({
 	test: {
 		browser: {
 			enabled: true,
-			name: "chromium",
-			provider: "playwright",
+			instances: [{ browser: "chromium" }],
+			provider: playwright(),
 			headless: true,
 		},
 	},
@@ -263,7 +265,7 @@ await waitForHydration(screen);
 await waitForHydration(screen.getByTestId("header"));
 ```
 
-Skip `waitForHydration()` for components without client directives. 
+Skip `waitForHydration()` for components without client directives.
 
 ### Supported frameworks
 
@@ -271,10 +273,10 @@ Any [front-end framework](https://docs.astro.build/en/guides/framework-component
 
 ## User Interactions
 
-Use `userEvent` from `@vitest/browser/context` for simulating user interactions:
+Use `userEvent` from `vitest/browser` for simulating user interactions:
 
 ```ts
-import { userEvent } from "@vitest/browser/context";
+import { userEvent } from "vitest/browser";
 
 await userEvent.click(button); // Click elements
 await userEvent.type(input, "Hello"); // Type text
@@ -336,7 +338,7 @@ For more issues, see [GitHub Issues](https://github.com/ascorbic/vitest-browser-
 ## Requirements
 
 - Astro 5.x or later
-- Vitest 3.x (Vitest 4 is not yet compatible with Astro)
+- Vitest 4.x or later
 - Vite 6.x or later
 
 ## Contributing

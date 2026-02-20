@@ -1,6 +1,8 @@
-import { getElementLocatorSelectors } from "@vitest/browser/utils";
-import type { Locator } from "@vitest/browser/context";
+import { utils } from "vitest/browser";
+import type { Locator } from "vitest/browser";
 import { expect } from "vitest";
+
+const { getElementLocatorSelectors } = utils;
 import type { RenderOptions, RenderResult } from "./types";
 
 const mountedContainers = new Set<HTMLElement>();
